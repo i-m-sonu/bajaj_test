@@ -1,15 +1,14 @@
 import express from 'express';
 import cors from 'cors';
 
-app.use(cors({ origin: '*' })); 
 const app = express();
 const PORT = 3000; 
 
-
-app.use(cors());
+// Middleware
+app.use(cors({ origin: '*' })); 
 app.use(express.json());
 
-
+// POST API for processing data
 app.post('/bfhl', (req, res) => {
     const { data } = req.body;
 
@@ -32,10 +31,10 @@ app.post('/bfhl', (req, res) => {
     });
 });
 
-
+// GET API
 app.get('/bfhl', (req, res) => {
     res.json({ operation_code: 1 });
 });
 
-
+// Start server
 app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
