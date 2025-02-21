@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 
+app.use(cors({ origin: '*' })); 
 const app = express();
 const PORT = 3000; 
 
