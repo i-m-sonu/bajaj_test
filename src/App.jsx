@@ -72,7 +72,13 @@ const App = () => {
     if (selectedOptions.includes('Highest alphabet')) {
       filtered.highest_alphabet = responseData.highest_alphabet;
     }
-    return <pre>{JSON.stringify(filtered, null, 2)}</pre>;
+    return (
+      <div>
+        {filtered.numbers && <p><strong>Numbers:</strong> {filtered.numbers.join(', ')}</p>}
+        {filtered.alphabets && <p><strong>Alphabets:</strong> {filtered.alphabets.join(', ')}</p>}
+        {filtered.highest_alphabet && <p><strong>Highest Alphabet:</strong> {filtered.highest_alphabet.join(', ')}</p>}
+      </div>
+    );
   };
 
   return (
