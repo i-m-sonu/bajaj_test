@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 
-
 const App = () => {
   const [inputValue, setInputValue] = useState('');
   const [jsonError, setJsonError] = useState('');
@@ -8,13 +7,11 @@ const App = () => {
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [submitted, setSubmitted] = useState(false);
 
-
   useEffect(() => {
     if (responseData && responseData.roll_number) {
       document.title = responseData.roll_number;
     }
   }, [responseData]);
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,6 +19,7 @@ const App = () => {
     setResponseData(null);
     setSubmitted(false);
     setSelectedOptions([]);
+
     let parsed;
     try {
       parsed = JSON.parse(inputValue);
@@ -35,17 +33,18 @@ const App = () => {
       return;
     }
 
-
     try {
-      const res = await fetch('https://testbfhl.herokuapp.com/bfhl', {
+      const res = await fetch('http://localhost:3000/bfhl', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(parsed)
       });
+
       if (!res.ok) {
         setJsonError('API call failed with status ' + res.status);
         return;
       }
+
       const data = await res.json();
       setResponseData(data);
       setSubmitted(true);
@@ -54,16 +53,12 @@ const App = () => {
     }
   };
 
-
   const handleOptionChange = (e) => {
     const { value, checked } = e.target;
-    if (checked) {
-      setSelectedOptions(prev => [...prev, value]);
-    } else {
-      setSelectedOptions(prev => prev.filter(option => option !== value));
-    }
+    setSelectedOptions(prev =>
+      checked ? [...prev, value] : prev.filter(option => option !== value)
+    );
   };
-
 
   const renderFilteredResponse = () => {
     if (!responseData) return null;
@@ -77,9 +72,7 @@ const App = () => {
     if (selectedOptions.includes('Highest alphabet')) {
       filtered.highest_alphabet = responseData.highest_alphabet;
     }
-    return (
-      <pre>{JSON.stringify(filtered, null, 2)}</pre>
-    );
+    return <pre>{JSON.stringify(filtered, null, 2)}</pre>;
   };
 
   return (
@@ -89,7 +82,7 @@ const App = () => {
         <textarea
           rows="5"
           cols="50"
-          placeholder='Example: { "data": ["A", "C", "z"] }'
+          placeholder='Example: { "data": ["A", "C", "z", "2", "3"] }'
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
         />
@@ -103,28 +96,13 @@ const App = () => {
           <h2>Multi-Select Filter</h2>
           <div className="checkbox-group">
             <label>
-              <input
-                type="checkbox"
-                value="Alphabets"
-                onChange={handleOptionChange}
-              />{' '}
-              Alphabets
+              <input type="checkbox" value="Alphabets" onChange={handleOptionChange} /> Alphabets
             </label>
             <label>
-              <input
-                type="checkbox"
-                value="Numbers"
-                onChange={handleOptionChange}
-              />{' '}
-              Numbers
+              <input type="checkbox" value="Numbers" onChange={handleOptionChange} /> Numbers
             </label>
             <label>
-              <input
-                type="checkbox"
-                value="Highest alphabet"
-                onChange={handleOptionChange}
-              />{' '}
-              Highest alphabet
+              <input type="checkbox" value="Highest alphabet" onChange={handleOptionChange} /> Highest alphabet
             </label>
           </div>
           <div className="response-box">
